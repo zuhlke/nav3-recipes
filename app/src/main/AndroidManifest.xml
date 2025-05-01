@@ -14,7 +14,18 @@
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
         <activity
-            android:name=".basic.MainActivity"
+            android:name=".basic.BasicActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Nav3Recipes">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".commonui.CommonUiActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Nav3Recipes">

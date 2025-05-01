@@ -54,7 +54,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.androidx.navigation3)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
