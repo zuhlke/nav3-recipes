@@ -18,7 +18,7 @@ These are the recipes and what they demonstrate.
 Clone this repository and open the root folder in [Android Studio](https://developer.android.com/studio). Each recipe is contained in its own package.
 
 ## Contributing
-
+We'd love to accept your contributions. Please follow [these instructions](CONTRIBUTING.md).
 
 ## License
 ```
