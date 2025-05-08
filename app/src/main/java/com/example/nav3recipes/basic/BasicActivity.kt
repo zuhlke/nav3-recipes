@@ -29,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
+import com.example.nav3recipes.utils.serializable.rememberSaveableMutableStateListOf
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -45,7 +46,7 @@ class BasicActivity : ComponentActivity() {
 
             Scaffold { paddingValues ->
 
-                val backStack = rememberSaveable { mutableStateListOf<Any>(Home) }
+                val backStack = rememberSaveableMutableStateListOf<Any>(Home)
 
                 NavDisplay(
                     backStack = backStack,
