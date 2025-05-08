@@ -39,9 +39,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.navigation3.SceneNavDisplay
-import androidx.navigation3.entry
-import androidx.navigation3.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
 import com.example.nav3recipes.content.TopLevelRoute
 import kotlinx.serialization.Serializable
 
@@ -57,11 +57,9 @@ val TOP_LEVEL_ROUTES = listOf(
 )
 
 class CommonUiActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             val topLevelBackStack = remember { TopLevelBackStack(Home) }
 
             Scaffold(
@@ -84,7 +82,7 @@ class CommonUiActivity : ComponentActivity() {
                     }
                 }
             ) {
-                SceneNavDisplay(
+                NavDisplay(
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
                     modifier = Modifier.padding(it),

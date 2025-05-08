@@ -23,7 +23,7 @@ plugins {
 
 android {
     namespace = "com.example.nav3recipes"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.nav3recipes"
@@ -68,7 +68,8 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.kotlinx.serialization.core)
-    implementation(libs.androidx.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.kotlinx.serialization.json)

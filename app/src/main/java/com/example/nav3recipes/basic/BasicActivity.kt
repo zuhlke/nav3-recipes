@@ -27,8 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.navigation3.NavEntry
-import androidx.navigation3.SceneNavDisplay
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.ui.NavDisplay
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -47,7 +47,7 @@ class BasicActivity : ComponentActivity() {
 
                 val backStack = rememberSaveable { mutableStateListOf<Any>(Home) }
 
-                SceneNavDisplay(
+                NavDisplay(
                     backStack = backStack,
                     modifier = Modifier.padding(paddingValues),
                     onBack = { backStack.removeLastOrNull() },
