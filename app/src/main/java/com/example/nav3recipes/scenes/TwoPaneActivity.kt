@@ -39,13 +39,10 @@ import com.example.nav3recipes.utils.serializable.rememberSaveableMutableStateLi
 import kotlinx.serialization.Serializable
 
 @Serializable
-object Home : NavKey()
+object Home
 
 @Serializable
-data class Product(val id: String) : NavKey()
-
-@Serializable
-object SomethingElse : NavKey()
+data class Product(val id: String)
 
 class TwoPaneActivity : ComponentActivity() {
 
@@ -55,8 +52,7 @@ class TwoPaneActivity : ComponentActivity() {
 
             Scaffold { paddingValues ->
 
-                val backStack = rememberNavBackStack(Home)
-
+                val backStack = remember { mutableStateListOf<Any>(Home) }
                 val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
 
                 NavDisplay(
@@ -65,7 +61,9 @@ class TwoPaneActivity : ComponentActivity() {
                     onBack = { backStack.removeLastOrNull() },
                     sceneStrategy = twoPaneStrategy,
                     entryProvider = entryProvider {
-                        entry<Home>(TwoPaneScene.twoPane()) {
+                        entry<Home>(
+                            metadata = TwoPaneScene.twoPane()
+                        ) {
                             Column {
                                 Text("Welcome to Nav3")
                                 Button(onClick = {
@@ -75,19 +73,10 @@ class TwoPaneActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        entry<Product>(TwoPaneScene.twoPane()) {
-                            Column {
-                                Text("Product ${it.id} ")
-                                Button(onClick = {
-                                    backStack.add(SomethingElse)
-                                }) {
-                                    Text("Click to add something else")
-                                }
-                            }
-
-                        }
-                        entry<SomethingElse> {
-                            Text("This is a new screen")
+                        entry<Product>(
+                            metadata = TwoPaneScene.twoPane()
+                        ) {
+                            Text("Product ${it.id} ")
                         }
                     }
                 )

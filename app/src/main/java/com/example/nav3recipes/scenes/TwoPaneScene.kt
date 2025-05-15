@@ -12,7 +12,7 @@ import androidx.navigation3.ui.SceneStrategy
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.example.nav3recipes.scenes.TwoPaneScene.Companion.TWO_PANE_KEY
 
-class TwoPaneScene<T: Any>(
+class TwoPaneScene<T : Any>(
     override val key: Any,
     override val entries: List<NavEntry<T>>,
     override val previousEntries: List<NavEntry<T>>,
@@ -22,24 +22,21 @@ class TwoPaneScene<T: Any>(
     override val content: @Composable (() -> Unit) = {
         Row(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.weight(0.5f)) {
-                // Render the list content
                 left.content.invoke(left.key)
             }
             Column(modifier = Modifier.weight(0.5f)) {
-                // Render the detail content, or retrieve and display the placeholder
                 right.content.invoke(right.key)
             }
         }
     }
 
-    public companion object {
+    companion object {
         internal const val TWO_PANE_KEY = "TwoPane"
-
-        fun twoPane()  = mapOf(TWO_PANE_KEY to true)
+        fun twoPane() = mapOf(TWO_PANE_KEY to true)
     }
 }
 
-class TwoPaneSceneStrategy<T: Any> : SceneStrategy<T> {
+class TwoPaneSceneStrategy<T : Any> : SceneStrategy<T> {
     @Composable
     override fun calculateScene(
         entries: List<NavEntry<T>>,
@@ -47,28 +44,32 @@ class TwoPaneSceneStrategy<T: Any> : SceneStrategy<T> {
     ): Scene<T>? {
         val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
-        // Only return a scene if the screen width is 600dp or greater
+        // Only return a Scene if the window is sufficiently wide to render two panes
         if (!windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
             return null
         }
 
-        // Only return a scene if there's a list in the back stack
         val lastTwoEntries = entries.takeLast(2)
 
-        if (lastTwoEntries.all {
-            it.metadata.containsKey(TWO_PANE_KEY)
-        }) {
-            return TwoPaneScene(
-                key = Pair(lastTwoEntries.first(), lastTwoEntries.last()),
+        // Only return a Scene if there are two entries, and that both have declared that they can
+        // be displayed in a two pane scene.
+        return if (lastTwoEntries.size == 2
+            && lastTwoEntries.all { it.metadata.containsKey(TWO_PANE_KEY) }
+        ) {
+
+            val leftEntry = lastTwoEntries.first()
+            val rightEntry = lastTwoEntries.last()
+
+            TwoPaneScene(
+                key = leftEntry,
                 entries = lastTwoEntries,
                 previousEntries = entries.dropLast(2),
-                left = lastTwoEntries.first(),
-                right = lastTwoEntries.last()
+                left = leftEntry,
+                right = rightEntry
             )
+        } else {
+            null
         }
-
-        return null
     }
-
 }
 
