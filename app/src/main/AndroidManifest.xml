@@ -51,6 +51,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity
+            android:name=".scenes.MyListDetailActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Nav3Recipes"/>
+        --><activity
+            android:name=".scenes.TwoPaneActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Nav3Recipes"/>
     </application>
 
 </manifest>
