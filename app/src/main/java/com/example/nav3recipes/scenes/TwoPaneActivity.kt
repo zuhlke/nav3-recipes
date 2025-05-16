@@ -19,6 +19,9 @@ package com.example.nav3recipes.scenes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,23 +29,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberMutableStateListOf
-import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.navEntryDecorator
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
+import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.example.nav3recipes.content.ContentBase
 import com.example.nav3recipes.ui.theme.PastelGreen
 import com.example.nav3recipes.ui.theme.PastelRed
@@ -60,54 +60,97 @@ data class Product(val id: Int)
 
 class TwoPaneActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val localNavSharedTransitionScope: ProvidableCompositionLocal<SharedTransitionScope> =
+                compositionLocalOf {
+                    throw IllegalStateException(
+                        "Unexpected access to LocalNavSharedTransitionScope. You must provide a " +
+                                "SharedTransitionScope from a call to SharedTransitionLayout() or " +
+                                "SharedTransitionScope()"
+                    )
+                }
+
+            /**
+             * A [NavEntryDecorator] that wraps each entry in a shared element that is controlled by the
+             * [Scene].
+             */
+            val sharedEntryInSceneNavEntryDecorator = navEntryDecorator { entry ->
+                with(localNavSharedTransitionScope.current) {
+                    Box(
+                        Modifier.sharedElement(
+                            rememberSharedContentState(entry.key),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                        ),
+                    ) {
+                        entry.content(entry.key)
+                    }
+                }
+            }
 
             Scaffold { paddingValues ->
 
                 val backStack = rememberSaveableMutableStateListOf<Any>(Home)
                 val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
-
-                NavDisplay(
-                    backStack = backStack,
-                    modifier = Modifier.padding(paddingValues),
-                    onBack = { keysToRemove -> repeat(keysToRemove){ backStack.removeLastOrNull() } },
-                    sceneStrategy = twoPaneStrategy,
-                    entryProvider = entryProvider {
-                        entry<Home>(
-                            metadata = TwoPaneScene.twoPane()
-                        ) {
-                            ContentBase("Welcome to Nav3", modifier = Modifier.background(PastelRed)){
-                                Button(onClick = { backStack.addProductRoute(1) } ) {
-                                    Text("View the first product")
-                                }
-                            }
-                        }
-                        entry<Product>(
-                            metadata = TwoPaneScene.twoPane()
-                        ) { product ->
-                            ContentBase("Product ${product.id} ", Modifier.background(colors[product.id % colors.size])) {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Button(onClick = {
-                                        backStack.addProductRoute(product.id + 1)
-                                    }) {
-                                        Text("View the next product")
-                                    }
-                                    Button(onClick = {
-                                        backStack.add(Profile)
-                                    }) {
-                                        Text("View profile")
+                SharedTransitionLayout {
+                    CompositionLocalProvider(localNavSharedTransitionScope provides this) {
+                        NavDisplay(
+                            backStack = backStack,
+                            modifier = Modifier.padding(paddingValues),
+                            onBack = { keysToRemove -> repeat(keysToRemove) { backStack.removeLastOrNull() } },
+                            entryDecorators = listOf(
+                                sharedEntryInSceneNavEntryDecorator,
+                                rememberSceneSetupNavEntryDecorator(),
+                                rememberSavedStateNavEntryDecorator()
+                            ),
+                            sceneStrategy = twoPaneStrategy,
+                            entryProvider = entryProvider {
+                                entry<Home>(
+                                    metadata = TwoPaneScene.twoPane()
+                                ) {
+                                    ContentBase(
+                                        "Welcome to Nav3",
+                                        modifier = Modifier.background(PastelRed)
+                                    ) {
+                                        Button(onClick = { backStack.addProductRoute(1) }) {
+                                            Text("View the first product")
+                                        }
                                     }
                                 }
+                                entry<Product>(
+                                    metadata = TwoPaneScene.twoPane()
+                                ) { product ->
+                                    ContentBase(
+                                        "Product ${product.id} ",
+                                        Modifier.background(colors[product.id % colors.size])
+                                    ) {
+                                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                            Button(onClick = {
+                                                backStack.addProductRoute(product.id + 1)
+                                            }) {
+                                                Text("View the next product")
+                                            }
+                                            Button(onClick = {
+                                                backStack.add(Profile)
+                                            }) {
+                                                Text("View profile")
+                                            }
+                                        }
+                                    }
+                                }
+                                entry<Profile> {
+                                    ContentBase(
+                                        "Profile (single pane only)",
+                                        Modifier.background(PastelGreen)
+                                    )
+                                }
                             }
-                        }
-                        entry<Profile> {
-                            ContentBase("Profile (single pane only)", Modifier.background(PastelGreen))
-                        }
+                        )
                     }
-                )
+                }
             }
         }
     }
