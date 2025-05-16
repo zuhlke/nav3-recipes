@@ -42,7 +42,7 @@ import kotlinx.serialization.Serializable
 object Home
 
 @Serializable
-data class Product(val id: String)
+data class Product(val id: Int)
 
 class TwoPaneActivity : ComponentActivity() {
 
@@ -52,13 +52,13 @@ class TwoPaneActivity : ComponentActivity() {
 
             Scaffold { paddingValues ->
 
-                val backStack = remember { mutableStateListOf<Any>(Home) }
+                val backStack = rememberSaveableMutableStateListOf<Any>(Home)
                 val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
 
                 NavDisplay(
                     backStack = backStack,
                     modifier = Modifier.padding(paddingValues),
-                    onBack = { backStack.removeLastOrNull() },
+                    onBack = { keysToRemove -> repeat(keysToRemove){ backStack.removeLastOrNull() } },
                     sceneStrategy = twoPaneStrategy,
                     entryProvider = entryProvider {
                         entry<Home>(
@@ -67,16 +67,27 @@ class TwoPaneActivity : ComponentActivity() {
                             Column {
                                 Text("Welcome to Nav3")
                                 Button(onClick = {
-                                    backStack.add(Product("123"))
+                                    val productRoute = Product(1)
+                                    // Avoid adding the same product route to the back stack twice.
+                                    if (!backStack.contains(productRoute)){
+                                        backStack.add(productRoute)
+                                    }
                                 }) {
-                                    Text("Click to navigate")
+                                    Text("View the first product")
                                 }
                             }
                         }
                         entry<Product>(
                             metadata = TwoPaneScene.twoPane()
-                        ) {
-                            Text("Product ${it.id} ")
+                        ) { product ->
+                            Column {
+                                Text("Product ${product.id} ")
+                                Button(onClick = {
+                                    backStack.add(Product(product.id + 1))
+                                } ) {
+                                    Text("View the next product")
+                                }
+                            }
                         }
                     }
                 )
