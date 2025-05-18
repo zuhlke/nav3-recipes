@@ -33,9 +33,9 @@ import com.example.nav3recipes.content.ContentGreen
 import kotlinx.serialization.Serializable
 
 /**
- * Basic example with two screens with a persistent back stack state.
+ * Basic example with a persistent back stack state.
  *
- * The back stack persists config changed because it's created using `rememberNavBackStack`. This
+ * The back stack persists config changes because it's created using `rememberNavBackStack`. This
  * requires that the back stack keys be both serializable and implement `NavKey`.
  */
 

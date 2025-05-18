@@ -32,7 +32,7 @@ import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
 
 /**
- * Basic example with two screens.
+ * Basic example with two screens, showing how to use the Navigation 3 API.
  */
 
 data object RouteA

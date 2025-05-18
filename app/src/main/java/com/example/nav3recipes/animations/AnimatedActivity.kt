@@ -12,12 +12,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
@@ -29,6 +27,12 @@ import com.example.nav3recipes.content.ContentMauve
 import com.example.nav3recipes.content.ContentOrange
 import kotlinx.serialization.Serializable
 
+
+/**
+ * This recipe shows how to override the default animations at the `NavDisplay` level, and at the
+ * individual destination level, shown for `ScreenC`.
+ *
+ */
 @Serializable
 data object ScreenA : NavKey
 
@@ -39,7 +43,7 @@ data object ScreenB : NavKey
 data object ScreenC : NavKey
 
 
-class AnimatedNavDisplayActivity : ComponentActivity() {
+class AnimatedActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

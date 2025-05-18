@@ -36,8 +36,6 @@ import kotlinx.serialization.Serializable
 
 /**
  * Basic example with two screens that uses the entryProvider DSL and has a persistent back stack.
- *
- * @See `BasicSaveableActivity`
  */
 
 @Serializable
