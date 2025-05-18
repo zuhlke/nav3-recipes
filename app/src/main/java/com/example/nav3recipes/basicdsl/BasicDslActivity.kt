@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.nav3recipes.basic
+package com.example.nav3recipes.basicdsl
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,50 +23,54 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
+import kotlinx.serialization.Serializable
 
 /**
- * Basic example with two screens.
+ * Basic example with two screens that uses the entryProvider DSL and has a persistent back stack.
+ *
+ * @See `BasicSaveableActivity`
  */
 
-data object RouteA
+@Serializable
+data object RouteA : NavKey
 
-data class RouteB(val id: String)
+@Serializable
+data class RouteB(val id: String) : NavKey
 
-class BasicActivity : ComponentActivity() {
+class BasicDslActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold { paddingValues ->
 
-                val backStack = remember { mutableStateListOf<Any>(RouteA) }
+                val backStack = rememberNavBackStack(RouteA)
 
                 NavDisplay(
                     backStack = backStack,
                     modifier = Modifier.padding(paddingValues),
                     onBack = { backStack.removeLastOrNull() },
-                    entryProvider = { key ->
-                        when (key) {
-                            is RouteA -> NavEntry(key) {
-                                ContentGreen("Welcome to Nav3") {
-                                    Button(onClick = {
-                                        backStack.add(RouteB("123"))
-                                    }) {
-                                        Text("Click to navigate")
-                                    }
+                    entryProvider = entryProvider {
+                        entry<RouteA> {
+                            ContentGreen("Welcome to Nav3") {
+                                Button(onClick = {
+                                    backStack.add(RouteB("123"))
+                                }) {
+                                    Text("Click to navigate")
                                 }
                             }
-                            is RouteB -> NavEntry(key) {
-                                ContentBlue("Route id: ${key.id} ")
-                            }
-                            else -> { error("Unknown route: $key") }
+                        }
+                        entry<RouteB> { key ->
+                            ContentBlue("Route id: ${key.id} ")
                         }
                     }
                 )

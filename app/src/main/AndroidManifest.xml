@@ -51,12 +51,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity
-            android:name=".scenes.MyListDetailActivity"
+        <activity
+            android:name=".scenes.materiallistdetail.MaterialListDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.Nav3Recipes"/>
-        --><activity
-            android:name=".scenes.TwoPaneActivity"
+        <activity
+            android:name=".scenes.twopane.TwoPaneActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Nav3Recipes"/>
+
+        <activity
+            android:name=".animations.AnimatedNavDisplayActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Nav3Recipes"/>
+
+        <activity
+            android:name=".conditional.ConditionalActivity"
             android:exported="true"
             android:theme="@style/Theme.Nav3Recipes"/>
     </application>

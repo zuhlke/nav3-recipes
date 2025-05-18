@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.nav3recipes.basic
+package com.example.nav3recipes.basicsaveable
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,30 +23,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
+import kotlinx.serialization.Serializable
 
 /**
- * Basic example with two screens.
+ * Basic example with two screens with a persistent back stack state.
+ *
+ * The back stack persists config changed because it's created using `rememberNavBackStack`. This
+ * requires that the back stack keys be both serializable and implement `NavKey`.
  */
 
-data object RouteA
+@Serializable data object RouteA : NavKey
 
-data class RouteB(val id: String)
+@Serializable data class RouteB(val id: String) : NavKey
 
-class BasicActivity : ComponentActivity() {
+class BasicSaveableActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold { paddingValues ->
 
-                val backStack = remember { mutableStateListOf<Any>(RouteA) }
+                val backStack = rememberNavBackStack(RouteA)
 
                 NavDisplay(
                     backStack = backStack,

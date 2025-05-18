@@ -14,39 +14,43 @@
  * limitations under the License.
  */
 
-package com.example.nav3recipes.basic
+package com.example.nav3recipes.viewmodels
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.nav3recipes.content.ContentBlue
-import com.example.nav3recipes.content.ContentGreen
+import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.example.nav3recipes.utils.serializable.rememberSaveableMutableStateListOf
+import kotlinx.serialization.Serializable
 
-/**
- * Basic example with two screens.
- */
+@Serializable
+data object Home : NavKey
 
-data object RouteA
-
-data class RouteB(val id: String)
+@Serializable
+data class Product(val id: String)
 
 class BasicActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             Scaffold { paddingValues ->
 
-                val backStack = remember { mutableStateListOf<Any>(RouteA) }
+                val backStack = rememberSaveableMutableStateListOf<Any>(Home)
 
                 NavDisplay(
                     backStack = backStack,
@@ -54,21 +58,27 @@ class BasicActivity : ComponentActivity() {
                     onBack = { backStack.removeLastOrNull() },
                     entryProvider = { key ->
                         when (key) {
-                            is RouteA -> NavEntry(key) {
-                                ContentGreen("Welcome to Nav3") {
+                            is Home -> NavEntry(key) {
+                                Column {
+                                    Text("Welcome to Nav3")
                                     Button(onClick = {
-                                        backStack.add(RouteB("123"))
+                                        backStack.add(Product("123"))
                                     }) {
                                         Text("Click to navigate")
                                     }
                                 }
                             }
-                            is RouteB -> NavEntry(key) {
-                                ContentBlue("Route id: ${key.id} ")
+                            is Product -> NavEntry(key) {
+                                Text("Product ${key.id} ")
                             }
-                            else -> { error("Unknown route: $key") }
+                            else -> NavEntry(Unit) { Text("Unknown route") }
                         }
-                    }
+                    },
+                    entryDecorators = listOf(
+                        rememberSceneSetupNavEntryDecorator(),
+                        rememberSavedStateNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator()
+                    )
                 )
             }
         }

@@ -68,14 +68,16 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.windowsizeclass)
     implementation(libs.androidx.adaptive.layout)
+    implementation(libs.androidx.material3.navigation3)
 
 
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.material.icons.extended)
-    implementation(libs.kotlinx.serialization.json)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

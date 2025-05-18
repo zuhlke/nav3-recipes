@@ -19,7 +19,6 @@ package com.example.nav3recipes.commonui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
@@ -35,41 +34,57 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.navigation3.ui.NavDisplay
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
-import com.example.nav3recipes.content.TopLevelRoute
-import kotlinx.serialization.Serializable
+import androidx.navigation3.ui.NavDisplay
+import com.example.nav3recipes.content.ContentBlue
+import com.example.nav3recipes.content.ContentGreen
+import com.example.nav3recipes.content.ContentPurple
+import com.example.nav3recipes.content.ContentRed
 
-@Serializable data object Home
-@Serializable data object ChatList
-@Serializable data object ChatDetail
-@Serializable data object Camera
+/**
+ * Common navigation UI example. This app has three top level routes: Home, ChatList and Camera.
+ * ChatList has a sub-route: ChatDetail.
+ *
+ * The app back stack state is modeled in `TopLevelBackStack`. This creates a back stack for each
+ * top level route. It flattens those maps to create a single back stack for `NavDisplay`. This allows
+ * `NavDisplay` to know where to go back to.
+ *
+ * Note that in this example, the Home route can move above the ChatList and Camera routes, meaning
+ * navigating back from Home doesn't necessarily leave the app. The app will exit when the user goes
+ * back from a single remaining top level route in the back stack.
+ */
 
-val TOP_LEVEL_ROUTES = listOf(
-    TopLevelRoute(key = Home, icon = Icons.Default.Home),
-    TopLevelRoute(key = ChatList, icon = Icons.Default.Face),
-    TopLevelRoute(key = Camera, icon = Icons.Filled.PlayArrow)
-)
+interface TopLevelRoute {
+    val icon: ImageVector
+}
+data object Home : TopLevelRoute { override val icon = Icons.Default.Home }
+data object ChatList : TopLevelRoute { override val icon = Icons.Default.Face }
+data object ChatDetail
+data object Camera : TopLevelRoute { override val icon = Icons.Default.PlayArrow }
+
+val TOP_LEVEL_ROUTES : List<TopLevelRoute> = listOf(Home, ChatList, Camera)
 
 class CommonUiActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val topLevelBackStack = remember { TopLevelBackStack(Home) }
+            val topLevelBackStack = remember { TopLevelBackStack<Any>(Home) }
 
             Scaffold(
                 bottomBar = {
                     NavigationBar {
                         TOP_LEVEL_ROUTES.forEach { topLevelRoute ->
+
+                            val isSelected = topLevelRoute == topLevelBackStack.topLevelKey
                             NavigationBarItem(
-                                selected = topLevelRoute.key == topLevelBackStack.topLevelKey,
+                                selected = isSelected,
                                 onClick = {
-                                    topLevelBackStack.addTopLevel(topLevelRoute.key)
+                                    topLevelBackStack.addTopLevel(topLevelRoute)
                                 },
                                 icon = {
                                     Icon(
@@ -88,21 +103,20 @@ class CommonUiActivity : ComponentActivity() {
                     modifier = Modifier.padding(it),
                     entryProvider = entryProvider {
                         entry<Home>{
-                            Text("Home screen")
+                            ContentRed("Home screen")
                         }
                         entry<ChatList>{
-                            Column {
-                                Text("Chat list screen")
+                            ContentGreen("Chat list screen"){
                                 Button(onClick = { topLevelBackStack.add(ChatDetail) }) {
                                     Text("Go to conversation")
                                 }
                             }
                         }
                         entry<ChatDetail>{
-                            Text("Chat detail screen")
+                            ContentBlue("Chat detail screen")
                         }
                         entry<Camera>{
-                            Text("Camera screen")
+                            ContentPurple("Camera screen")
                         }
                     }
                 )
@@ -111,43 +125,51 @@ class CommonUiActivity : ComponentActivity() {
     }
 }
 
-class TopLevelBackStack(startKey: Any) {
+class TopLevelBackStack<T: Any>(startKey: T) {
 
-    var topLevelStacks : LinkedHashMap<Any, SnapshotStateList<Any>> = linkedMapOf(
+    // Maintain a stack for each top level route
+    private var topLevelStacks : LinkedHashMap<T, SnapshotStateList<T>> = linkedMapOf(
         startKey to mutableStateListOf(startKey)
     )
 
+    // Expose the current top level route for consumers
     var topLevelKey by mutableStateOf(startKey)
+        private set
 
+    // Expose the back stack so it can be rendered by the NavDisplay
     val backStack = mutableStateListOf(startKey)
 
-    private fun updateBackStack(){
-        backStack.clear()
-        backStack.addAll(topLevelStacks.flatMap { it.value })
-    }
-    fun addTopLevel(key: Any){
+    private fun updateBackStack() =
+        backStack.apply {
+            clear()
+            addAll(topLevelStacks.flatMap { it.value })
+        }
+
+    fun addTopLevel(key: T){
 
         // If the top level doesn't exist, add it
         if (topLevelStacks[key] == null){
             topLevelStacks.put(key, mutableStateListOf(key))
         } else {
             // Otherwise just move it to the end of the stacks
-            topLevelStacks.remove(key)?.let {
-                topLevelStacks.put(key, it)
+            topLevelStacks.apply {
+                remove(key)?.let {
+                    put(key, it)
+                }
             }
         }
         topLevelKey = key
         updateBackStack()
     }
 
-    fun add(key: Any){
+    fun add(key: T){
         topLevelStacks[topLevelKey]?.add(key)
         updateBackStack()
     }
 
     fun removeLast(){
         val removedKey = topLevelStacks[topLevelKey]?.removeLastOrNull()
-        // If the removed key was a top level key, remove it
+        // If the removed key was a top level key, remove the associated top level stack
         topLevelStacks.remove(removedKey)
         topLevelKey = topLevelStacks.keys.last()
         updateBackStack()

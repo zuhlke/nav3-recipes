@@ -39,10 +39,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nav3recipes.ui.theme.Nav3RecipesTheme
+import com.example.nav3recipes.ui.theme.PastelBlue
 import com.example.nav3recipes.ui.theme.PastelGreen
+import com.example.nav3recipes.ui.theme.PastelMauve
+import com.example.nav3recipes.ui.theme.PastelOrange
+import com.example.nav3recipes.ui.theme.PastelPink
+import com.example.nav3recipes.ui.theme.PastelPurple
 import com.example.nav3recipes.ui.theme.PastelRed
+import com.example.nav3recipes.ui.theme.PastelYellow
 
-data class TopLevelRoute(val key: Any, val icon: ImageVector)
+
 
 @Composable
 fun ContentA(onNext: () -> Unit) = ContentBase(
@@ -50,9 +56,11 @@ fun ContentA(onNext: () -> Unit) = ContentBase(
     modifier = Modifier.background(PastelRed),
     onNext = onNext,
 ) {
-    Text(modifier =
-        Modifier.padding(16.dp),
-        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor eros hendrerit nec.")
+    Text(
+        modifier =
+            Modifier.padding(16.dp),
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor eros hendrerit nec."
+    )
 }
 
 @Composable
@@ -60,21 +68,26 @@ fun ContentB() = ContentBase(
     title = "Content B Title",
     modifier = Modifier.background(PastelGreen)
 ) {
-    Text(modifier =
-    Modifier.padding(16.dp),
-        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor eros hendrerit nec.")
+    Text(
+        modifier =
+            Modifier.padding(16.dp),
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor eros hendrerit nec."
+    )
 }
 
 @Composable
-fun SampleContent(title: String, backgroundColor: Color, onNext: (() -> Unit)? = null) = ContentBase(
-    title = title,
-    modifier = Modifier.background(backgroundColor),
-    onNext = onNext,
-) {
-    Text(modifier =
-        Modifier.padding(16.dp),
-        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor eros hendrerit nec.")
-}
+fun SampleContent(title: String, backgroundColor: Color, onNext: (() -> Unit)? = null) =
+    ContentBase(
+        title = title,
+        modifier = Modifier.background(backgroundColor),
+        onNext = onNext,
+    ) {
+        Text(
+            modifier =
+                Modifier.padding(16.dp),
+            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor eros hendrerit nec."
+        )
+    }
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -93,7 +106,7 @@ fun ContentBase(
     ) {
         Title(title)
         if (content != null) content()
-        if (onNext != null){
+        if (onNext != null) {
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onNext
@@ -125,12 +138,117 @@ fun ContentAPreview() {
 }
 
 @Composable
-fun Count(name: String){
-    var count : Int by rememberSaveable { mutableIntStateOf(0) }
+fun Count(name: String) {
+    var count: Int by rememberSaveable { mutableIntStateOf(0) }
     Column {
         Text("Count $name is $count")
-        Button(onClick = { count++ }){
+        Button(onClick = { count++ }) {
             Text("Increment")
         }
     }
 }
+
+
+@Composable
+fun ContentRed(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelRed),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentOrange(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelOrange),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentYellow(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelYellow),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentGreen(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelGreen),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentBlue(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelBlue),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentMauve(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelMauve),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentPurple(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelPurple),
+    onNext = onNext,
+    content = content
+)
+
+@Composable
+fun ContentPink(
+    title: String,
+    modifier: Modifier = Modifier,
+    onNext: (() -> Unit)? = null,
+    content: (@Composable () -> Unit)? = null,
+) = ContentBase(
+    title = title,
+    modifier = modifier.background(PastelPink),
+    onNext = onNext,
+    content = content
+)

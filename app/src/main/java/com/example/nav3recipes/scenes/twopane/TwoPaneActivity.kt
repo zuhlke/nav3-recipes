@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.nav3recipes.scenes
+package com.example.nav3recipes.scenes.twopane
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,27 +36,38 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.navEntryDecorator
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.example.nav3recipes.content.ContentBase
+import com.example.nav3recipes.content.ContentGreen
+import com.example.nav3recipes.content.ContentRed
 import com.example.nav3recipes.ui.theme.PastelGreen
-import com.example.nav3recipes.ui.theme.PastelRed
 import com.example.nav3recipes.ui.theme.colors
 import com.example.nav3recipes.utils.serializable.rememberSaveableMutableStateListOf
 import kotlinx.serialization.Serializable
 
-@Serializable
-object Home
-
-@Serializable
-data class Product(val id: Int)
-
-@Serializable data object Profile
+/**
+ * This example shows how to create custom layouts using the Scenes API.
+ *
+ * A custom Scene, `TwoPaneScene`, will render content in two panes if:
+ *
+ * - the window width is over 600dp
+ * - the last two nav entries on the back stack have indicated that they support being displayed in
+ * a `TwoPaneScene` in their metadata.
+ *
+ *
+ * @see `TwoPaneScene`
+ */
+@Serializable object Home : NavKey
+@Serializable data class Product(val id: Int) : NavKey
+@Serializable data object Profile : NavKey
 
 class TwoPaneActivity : ComponentActivity() {
 
@@ -93,8 +104,9 @@ class TwoPaneActivity : ComponentActivity() {
 
             Scaffold { paddingValues ->
 
-                val backStack = rememberSaveableMutableStateListOf<Any>(Home)
+                val backStack = rememberNavBackStack(Home)
                 val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
+
                 SharedTransitionLayout {
                     CompositionLocalProvider(localNavSharedTransitionScope provides this) {
                         NavDisplay(
@@ -111,15 +123,11 @@ class TwoPaneActivity : ComponentActivity() {
                                 entry<Home>(
                                     metadata = TwoPaneScene.twoPane()
                                 ) {
-                                    ContentBase(
-                                        "Welcome to Nav3",
-                                        modifier = Modifier.background(PastelRed)
-                                    ) {
-                                        Button(onClick = { backStack.addProductRoute(1) }) {
+                                    ContentRed("Welcome to Nav3"){
+                                        Button(onClick = { backStack.addProductRoute(1) } ) {
                                             Text("View the first product")
                                         }
-                                    }
-                                }
+                                    }                                }
                                 entry<Product>(
                                     metadata = TwoPaneScene.twoPane()
                                 ) { product ->
@@ -142,10 +150,7 @@ class TwoPaneActivity : ComponentActivity() {
                                     }
                                 }
                                 entry<Profile> {
-                                    ContentBase(
-                                        "Profile (single pane only)",
-                                        Modifier.background(PastelGreen)
-                                    )
+                                    ContentGreen("Profile (single pane only)")
                                 }
                             }
                         )
@@ -155,8 +160,9 @@ class TwoPaneActivity : ComponentActivity() {
         }
     }
 
-    private fun SnapshotStateList<Any>.addProductRoute(productId: Int) {
-        val productRoute = Product(productId)
+    private fun SnapshotStateList<NavKey>.addProductRoute(productId: Int) {
+        val productRoute =
+            Product(productId)
         // Avoid adding the same product route to the back stack twice.
         if (!contains(productRoute)) {
             add(productRoute)

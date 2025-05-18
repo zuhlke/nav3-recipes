@@ -16,6 +16,8 @@
 -->
 
 <resources>
-
-    <style name="Theme.Nav3Recipes" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Nav3Recipes" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Set status bar appearance for light background -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

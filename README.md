@@ -1,18 +1,27 @@
 # Navigation 3 - Code recipes
 Jetpack Navigation 3 is a library for app navigation. This repository contains recipes for how to 
-use its APIs to implement common navigation features.
+use its APIs to implement common navigation use cases.
 
 ## Recipes
 These are the recipes and what they demonstrate. 
 
+**Basic API examples**
+- **[Basic](app/src/main/java/com/example/nav3recipes/basic)**: Shows most basic API usage
+- **[Saveable back stack](app/src/main/java/com/example/nav3recipes/basicsaveable)**: As above, with a persistent back stack
+- **[Entry provider DSL](app/src/main/java/com/example/nav3recipes/basicdsl)**: As above, using the entryProvider DSL
 
-- **[Basic example](app/src/main/java/com/example/nav3recipes/basic)**: Basic API usage with a persistent back stack
+**Layouts / Scenes**
+- **[Material adaptive](app/src/main/java/com/example/nav3recipes/materiallistdetail)**: Shows how to use a Material list-detail layout. 
+- **[Custom Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane)**: Shows how to create a custom layout using a `Scene` and `SceneStrategy`.
+
+**Common use cases**
 - **[Common navigation UI](app/src/main/java/com/example/nav3recipes/commonui)**: A common navigation toolbar where each item in the toolbar navigates to a top level destination
+- **[Conditional navigation](app/src/main/java/com/example/nav3recipes/conditional)**: Switch to a different navigation flow when a condition is met. For example, for authentication or first-time user onboarding
+
+**Planned**
+- **[Deeplinks]()**: Create and handle deeplinks to specific destinations
 - **[Android XR]()**: Custom navigation and layout behavior for Android XR
 - **[Returning a result from a destination]()**: Return a result to a previous destination
-- **[Conditional navigation]()**: Switch to a different navigation flow when a condition is met. For example, for authentication or first-time user onboarding 
-- **[Deeplinks]()**: Create and handle deeplinks to specific destinations
-- **[Adaptive layouts]()**: Change navigation behavior and layouts based on device configuration (e.g. window width) 
 
 ## Instructions
 Clone this repository and open the root folder in [Android Studio](https://developer.android.com/studio). Each recipe is contained in its own package.
