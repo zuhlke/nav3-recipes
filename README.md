@@ -1,5 +1,5 @@
 # Navigation 3 - Code recipes
-Jetpack Navigation 3 is a library for app navigation. This repository contains recipes for how to 
+[Jetpack Navigation 3](https://goog.le/nav3) is a library for app navigation. This repository contains recipes for how to 
 use its APIs to implement common navigation use cases.
 
 ## Recipes
@@ -20,9 +20,9 @@ These are the recipes and what they demonstrate.
 - **[Conditional navigation](app/src/main/java/com/example/nav3recipes/conditional)**: Switch to a different navigation flow when a condition is met. For example, for authentication or first-time user onboarding.
 
 **Planned**
-- **[Deeplinks]()**: Create and handle deeplinks to specific destinations
-- **[Android XR]()**: Custom navigation and layout behavior for Android XR
-- **[Returning a result from a destination]()**: Return a result to a previous destination
+- **Deeplinks**: Create and handle deeplinks to specific destinations
+- **Android XR**: Custom navigation and layout behavior for Android XR
+- **Returning a result from a destination**: Return a result to a previous destination
 
 ## Instructions
 Clone this repository and open the root folder in [Android Studio](https://developer.android.com/studio). Each recipe is contained in its own package.
