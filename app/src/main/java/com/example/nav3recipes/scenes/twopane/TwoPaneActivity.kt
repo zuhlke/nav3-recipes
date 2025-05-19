@@ -48,9 +48,7 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.example.nav3recipes.content.ContentBase
 import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentRed
-import com.example.nav3recipes.ui.theme.PastelGreen
 import com.example.nav3recipes.ui.theme.colors
-import com.example.nav3recipes.utils.serializable.rememberSaveableMutableStateListOf
 import kotlinx.serialization.Serializable
 
 /**
