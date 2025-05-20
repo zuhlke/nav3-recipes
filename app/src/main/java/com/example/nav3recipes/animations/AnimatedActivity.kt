@@ -4,6 +4,7 @@ package com.example.nav3recipes.animations
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
@@ -12,6 +13,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -46,6 +48,7 @@ data object ScreenC : NavKey
 class AnimatedActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
 
@@ -112,7 +115,7 @@ class AnimatedActivity : ComponentActivity() {
                         slideInHorizontally(initialOffsetX = { -it }) togetherWith
                                 slideOutHorizontally(targetOffsetX = { it })
                     },
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.consumeWindowInsets(paddingValues)
                 )
             }
         }

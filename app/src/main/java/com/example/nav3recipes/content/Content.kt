@@ -20,8 +20,11 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -47,7 +50,6 @@ import com.example.nav3recipes.ui.theme.PastelPink
 import com.example.nav3recipes.ui.theme.PastelPurple
 import com.example.nav3recipes.ui.theme.PastelRed
 import com.example.nav3recipes.ui.theme.PastelYellow
-
 
 
 @Composable
@@ -101,6 +103,7 @@ fun ContentBase(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .padding(WindowInsets.safeContent.asPaddingValues())
             .fillMaxSize()
             .clip(RoundedCornerShape(48.dp))
     ) {
@@ -115,7 +118,6 @@ fun ContentBase(
             }
         }
     }
-
 }
 
 @Composable

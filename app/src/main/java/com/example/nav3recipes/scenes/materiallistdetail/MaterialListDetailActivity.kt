@@ -19,7 +19,9 @@ package com.example.nav3recipes.scenes.materiallistdetail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -58,6 +60,7 @@ class MaterialListDetailActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -69,7 +72,7 @@ class MaterialListDetailActivity : ComponentActivity() {
 
                 NavDisplay(
                     backStack = backStack,
-                    modifier = Modifier.padding(paddingValues),
+                    modifier = Modifier.consumeWindowInsets(paddingValues),
                     onBack = { keysToRemove -> repeat(keysToRemove){ backStack.removeLastOrNull() } },
                     sceneStrategy = listDetailStrategy,
                     entryProvider = entryProvider {

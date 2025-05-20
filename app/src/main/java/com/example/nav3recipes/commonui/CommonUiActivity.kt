@@ -19,6 +19,8 @@ package com.example.nav3recipes.commonui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
@@ -71,6 +73,7 @@ val TOP_LEVEL_ROUTES : List<TopLevelRoute> = listOf(Home, ChatList, Camera)
 
 class CommonUiActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             val topLevelBackStack = remember { TopLevelBackStack<Any>(Home) }
@@ -96,11 +99,11 @@ class CommonUiActivity : ComponentActivity() {
                         }
                     }
                 }
-            ) {
+            ) { paddingValues ->
                 NavDisplay(
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
-                    modifier = Modifier.padding(it),
+                    modifier = Modifier.consumeWindowInsets(paddingValues),
                     entryProvider = entryProvider {
                         entry<Home>{
                             ContentRed("Home screen")

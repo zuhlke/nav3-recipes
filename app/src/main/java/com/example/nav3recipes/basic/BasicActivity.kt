@@ -19,6 +19,8 @@ package com.example.nav3recipes.basic
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -42,6 +44,7 @@ data class RouteB(val id: String)
 class BasicActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold { paddingValues ->
@@ -50,7 +53,7 @@ class BasicActivity : ComponentActivity() {
 
                 NavDisplay(
                     backStack = backStack,
-                    modifier = Modifier.padding(paddingValues),
+                    modifier = Modifier.consumeWindowInsets(paddingValues),
                     onBack = { backStack.removeLastOrNull() },
                     entryProvider = { key ->
                         when (key) {

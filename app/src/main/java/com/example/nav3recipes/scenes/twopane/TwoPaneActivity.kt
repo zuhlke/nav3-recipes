@@ -19,12 +19,14 @@ package com.example.nav3recipes.scenes.twopane
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -71,6 +73,7 @@ class TwoPaneActivity : ComponentActivity() {
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -109,7 +112,7 @@ class TwoPaneActivity : ComponentActivity() {
                     CompositionLocalProvider(localNavSharedTransitionScope provides this) {
                         NavDisplay(
                             backStack = backStack,
-                            modifier = Modifier.padding(paddingValues),
+                            modifier = Modifier.consumeWindowInsets(paddingValues),
                             onBack = { keysToRemove -> repeat(keysToRemove) { backStack.removeLastOrNull() } },
                             entryDecorators = listOf(
                                 sharedEntryInSceneNavEntryDecorator,
