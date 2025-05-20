@@ -22,7 +22,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
@@ -62,52 +61,49 @@ class MaterialListDetailActivity : ComponentActivity() {
 
         setContent {
 
-            Scaffold { _ ->
+            val backStack = rememberNavBackStack(ConversationList)
+            val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
-                val backStack = rememberNavBackStack(ConversationList)
-                val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
-
-                NavDisplay(
-                    backStack = backStack,
-                    onBack = { keysToRemove -> repeat(keysToRemove){ backStack.removeLastOrNull() } },
-                    sceneStrategy = listDetailStrategy,
-                    entryProvider = entryProvider {
-                        entry<ConversationList>(
-                            metadata = ListDetailSceneStrategy.listPane(
-                                detailPlaceholder = {
-                                    ContentYellow("Choose a conversation from the list")
-                                }
-                            )
-                        ) {
-                            ContentRed("Welcome to Nav3"){
-                                Button(onClick = {
-                                    backStack.add(ConversationDetail("ABC"))
-                                } ) {
-                                    Text("View conversation")
-                                }
+            NavDisplay(
+                backStack = backStack,
+                onBack = { keysToRemove -> repeat(keysToRemove) { backStack.removeLastOrNull() } },
+                sceneStrategy = listDetailStrategy,
+                entryProvider = entryProvider {
+                    entry<ConversationList>(
+                        metadata = ListDetailSceneStrategy.listPane(
+                            detailPlaceholder = {
+                                ContentYellow("Choose a conversation from the list")
                             }
-                        }
-                        entry<ConversationDetail>(
-                            metadata = ListDetailSceneStrategy.detailPane()
-                        ) { conversation ->
-                            ContentBlue("Conversation ${conversation.id} ") {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Button(onClick = {
-                                        backStack.add(Profile)
-                                    }) {
-                                        Text("View profile")
-                                    }
-                                }
+                        )
+                    ) {
+                        ContentRed("Welcome to Nav3") {
+                            Button(onClick = {
+                                backStack.add(ConversationDetail("ABC"))
+                            }) {
+                                Text("View conversation")
                             }
-                        }
-                        entry<Profile>(
-                            metadata = ListDetailSceneStrategy.extraPane()
-                        ) {
-                            ContentGreen("Profile")
                         }
                     }
-                )
-            }
+                    entry<ConversationDetail>(
+                        metadata = ListDetailSceneStrategy.detailPane()
+                    ) { conversation ->
+                        ContentBlue("Conversation ${conversation.id} ") {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Button(onClick = {
+                                    backStack.add(Profile)
+                                }) {
+                                    Text("View profile")
+                                }
+                            }
+                        }
+                    }
+                    entry<Profile>(
+                        metadata = ListDetailSceneStrategy.extraPane()
+                    ) {
+                        ContentGreen("Profile")
+                    }
+                }
+            )
         }
     }
 }

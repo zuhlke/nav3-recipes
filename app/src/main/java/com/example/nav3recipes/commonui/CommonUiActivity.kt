@@ -20,6 +20,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
@@ -36,6 +38,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -44,6 +47,7 @@ import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentPurple
 import com.example.nav3recipes.content.ContentRed
+import com.example.nav3recipes.ui.theme.PastelPurple
 
 /**
  * Common navigation UI example. This app has three top level routes: Home, ChatList and Camera.
@@ -96,7 +100,7 @@ class CommonUiActivity : ComponentActivity() {
                         }
                     }
                 }
-            ) { _ -> // We will handle padding at a lower level in the UI tree
+            ) { contentPadding ->
                 NavDisplay(
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
@@ -117,7 +121,8 @@ class CommonUiActivity : ComponentActivity() {
                         entry<Camera>{
                             ContentPurple("Camera screen")
                         }
-                    }
+                    },
+                    modifier = Modifier.consumeWindowInsets(contentPadding)
                 )
             }
         }

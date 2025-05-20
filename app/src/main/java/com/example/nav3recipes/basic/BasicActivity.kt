@@ -21,7 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -44,32 +43,33 @@ class BasicActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold { _ ->
+            val backStack = remember { mutableStateListOf<Any>(RouteA) }
 
-                val backStack = remember { mutableStateListOf<Any>(RouteA) }
-
-                NavDisplay(
-                    backStack = backStack,
-                    onBack = { backStack.removeLastOrNull() },
-                    entryProvider = { key ->
-                        when (key) {
-                            is RouteA -> NavEntry(key) {
-                                ContentGreen("Welcome to Nav3") {
-                                    Button(onClick = {
-                                        backStack.add(RouteB("123"))
-                                    }) {
-                                        Text("Click to navigate")
-                                    }
+            NavDisplay(
+                backStack = backStack,
+                onBack = { backStack.removeLastOrNull() },
+                entryProvider = { key ->
+                    when (key) {
+                        is RouteA -> NavEntry(key) {
+                            ContentGreen("Welcome to Nav3") {
+                                Button(onClick = {
+                                    backStack.add(RouteB("123"))
+                                }) {
+                                    Text("Click to navigate")
                                 }
                             }
-                            is RouteB -> NavEntry(key) {
-                                ContentBlue("Route id: ${key.id} ")
-                            }
-                            else -> { error("Unknown route: $key") }
+                        }
+
+                        is RouteB -> NavEntry(key) {
+                            ContentBlue("Route id: ${key.id} ")
+                        }
+
+                        else -> {
+                            error("Unknown route: $key")
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
