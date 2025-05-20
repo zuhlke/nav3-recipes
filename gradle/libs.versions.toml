@@ -13,7 +13,7 @@
 # limitations under the License.
 
 [versions]
-agp = "8.11.0-alpha09"
+agp = "8.10.0"
 kotlin = "2.1.20"
 kotlinSerialization = "2.1.21"
 coreKtx = "1.16.0"
@@ -26,7 +26,7 @@ lifecycleRuntimeKtx = "2.8.7"
 lifecycleViewmodel = "1.0.0-SNAPSHOT"
 activityCompose = "1.10.1"
 composeBom = "2025.04.01"
-navigation3 = "1.0.0-SNAPSHOT"
+navigation3 = "1.0.0-alpha01"
 material3 = "1.4.0-alpha13"
 nav3Material = "1.0.0-SNAPSHOT"
 ksp = "2.1.20-2.0.0"
