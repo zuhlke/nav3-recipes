@@ -20,13 +20,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -52,30 +47,26 @@ class BasicDslActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold { paddingValues ->
+            val backStack = rememberNavBackStack(RouteA)
 
-                val backStack = rememberNavBackStack(RouteA)
-
-                NavDisplay(
-                    backStack = backStack,
-                    modifier = Modifier.consumeWindowInsets(paddingValues),
-                    onBack = { backStack.removeLastOrNull() },
-                    entryProvider = entryProvider {
-                        entry<RouteA> {
-                            ContentGreen("Welcome to Nav3") {
-                                Button(onClick = {
-                                    backStack.add(RouteB("123"))
-                                }) {
-                                    Text("Click to navigate")
-                                }
+            NavDisplay(
+                backStack = backStack,
+                onBack = { backStack.removeLastOrNull() },
+                entryProvider = entryProvider {
+                    entry<RouteA> {
+                        ContentGreen("Welcome to Nav3") {
+                            Button(onClick = {
+                                backStack.add(RouteB("123"))
+                            }) {
+                                Text("Click to navigate")
                             }
                         }
-                        entry<RouteB> { key ->
-                            ContentBlue("Route id: ${key.id} ")
-                        }
                     }
-                )
-            }
+                    entry<RouteB> { key ->
+                        ContentBlue("Route id: ${key.id} ")
+                    }
+                }
+            )
         }
     }
 }

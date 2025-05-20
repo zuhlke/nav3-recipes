@@ -26,10 +26,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
@@ -41,8 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.navEntryDecorator
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
@@ -65,9 +62,12 @@ import kotlinx.serialization.Serializable
  *
  * @see `TwoPaneScene`
  */
-@Serializable object Home : NavKey
-@Serializable data class Product(val id: Int) : NavKey
-@Serializable data object Profile : NavKey
+@Serializable
+object Home : NavKey
+@Serializable
+data class Product(val id: Int) : NavKey
+@Serializable
+data object Profile : NavKey
 
 class TwoPaneActivity : ComponentActivity() {
 
@@ -103,59 +103,57 @@ class TwoPaneActivity : ComponentActivity() {
                 }
             }
 
-            Scaffold { paddingValues ->
 
-                val backStack = rememberNavBackStack(Home)
-                val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
+            val backStack = rememberNavBackStack(Home)
+            val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
 
-                SharedTransitionLayout {
-                    CompositionLocalProvider(localNavSharedTransitionScope provides this) {
-                        NavDisplay(
-                            backStack = backStack,
-                            modifier = Modifier.consumeWindowInsets(paddingValues),
-                            onBack = { keysToRemove -> repeat(keysToRemove) { backStack.removeLastOrNull() } },
-                            entryDecorators = listOf(
-                                sharedEntryInSceneNavEntryDecorator,
-                                rememberSceneSetupNavEntryDecorator(),
-                                rememberSavedStateNavEntryDecorator()
-                            ),
-                            sceneStrategy = twoPaneStrategy,
-                            entryProvider = entryProvider {
-                                entry<Home>(
-                                    metadata = TwoPaneScene.twoPane()
+            SharedTransitionLayout {
+                CompositionLocalProvider(localNavSharedTransitionScope provides this) {
+                    NavDisplay(
+                        backStack = backStack,
+                        onBack = { keysToRemove -> repeat(keysToRemove) { backStack.removeLastOrNull() } },
+                        entryDecorators = listOf(
+                            sharedEntryInSceneNavEntryDecorator,
+                            rememberSceneSetupNavEntryDecorator(),
+                            rememberSavedStateNavEntryDecorator()
+                        ),
+                        sceneStrategy = twoPaneStrategy,
+                        entryProvider = entryProvider {
+                            entry<Home>(
+                                metadata = TwoPaneScene.twoPane()
+                            ) {
+                                ContentRed("Welcome to Nav3") {
+                                    Button(onClick = { backStack.addProductRoute(1) }) {
+                                        Text("View the first product")
+                                    }
+                                }
+                            }
+                            entry<Product>(
+                                metadata = TwoPaneScene.twoPane()
+                            ) { product ->
+                                ContentBase(
+                                    "Product ${product.id} ",
+                                    Modifier.background(colors[product.id % colors.size])
                                 ) {
-                                    ContentRed("Welcome to Nav3"){
-                                        Button(onClick = { backStack.addProductRoute(1) } ) {
-                                            Text("View the first product")
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Button(onClick = {
+                                            backStack.addProductRoute(product.id + 1)
+                                        }) {
+                                            Text("View the next product")
                                         }
-                                    }                                }
-                                entry<Product>(
-                                    metadata = TwoPaneScene.twoPane()
-                                ) { product ->
-                                    ContentBase(
-                                        "Product ${product.id} ",
-                                        Modifier.background(colors[product.id % colors.size])
-                                    ) {
-                                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                            Button(onClick = {
-                                                backStack.addProductRoute(product.id + 1)
-                                            }) {
-                                                Text("View the next product")
-                                            }
-                                            Button(onClick = {
-                                                backStack.add(Profile)
-                                            }) {
-                                                Text("View profile")
-                                            }
+                                        Button(onClick = {
+                                            backStack.add(Profile)
+                                        }) {
+                                            Text("View profile")
                                         }
                                     }
                                 }
-                                entry<Profile> {
-                                    ContentGreen("Profile (single pane only)")
-                                }
                             }
-                        )
-                    }
+                            entry<Profile> {
+                                ContentGreen("Profile (single pane only)")
+                            }
+                        }
+                    )
                 }
             }
         }

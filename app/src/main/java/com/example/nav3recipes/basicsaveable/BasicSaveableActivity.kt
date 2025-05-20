@@ -20,12 +20,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -41,9 +37,11 @@ import kotlinx.serialization.Serializable
  * requires that the back stack keys be both serializable and implement `NavKey`.
  */
 
-@Serializable data object RouteA : NavKey
+@Serializable
+data object RouteA : NavKey
 
-@Serializable data class RouteB(val id: String) : NavKey
+@Serializable
+data class RouteB(val id: String) : NavKey
 
 class BasicSaveableActivity : ComponentActivity() {
 
@@ -51,33 +49,33 @@ class BasicSaveableActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold { paddingValues ->
+            val backStack = rememberNavBackStack(RouteA)
 
-                val backStack = rememberNavBackStack(RouteA)
-
-                NavDisplay(
-                    backStack = backStack,
-                    modifier = Modifier.consumeWindowInsets(paddingValues),
-                    onBack = { backStack.removeLastOrNull() },
-                    entryProvider = { key ->
-                        when (key) {
-                            is RouteA -> NavEntry(key) {
-                                ContentGreen("Welcome to Nav3") {
-                                    Button(onClick = {
-                                        backStack.add(RouteB("123"))
-                                    }) {
-                                        Text("Click to navigate")
-                                    }
+            NavDisplay(
+                backStack = backStack,
+                onBack = { backStack.removeLastOrNull() },
+                entryProvider = { key ->
+                    when (key) {
+                        is RouteA -> NavEntry(key) {
+                            ContentGreen("Welcome to Nav3") {
+                                Button(onClick = {
+                                    backStack.add(RouteB("123"))
+                                }) {
+                                    Text("Click to navigate")
                                 }
                             }
-                            is RouteB -> NavEntry(key) {
-                                ContentBlue("Route id: ${key.id} ")
-                            }
-                            else -> { error("Unknown route: $key") }
+                        }
+
+                        is RouteB -> NavEntry(key) {
+                            ContentBlue("Route id: ${key.id} ")
+                        }
+
+                        else -> {
+                            error("Unknown route: $key")
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

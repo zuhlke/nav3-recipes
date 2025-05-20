@@ -20,16 +20,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -58,50 +55,48 @@ class ConditionalActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold { paddingValues ->
 
-                val appBackStack = remember {
-                    AppBackStack(startRoute = Home, loginRoute = Login)
-                }
 
-                NavDisplay(
-                    backStack = appBackStack.backStack,
-                    modifier = Modifier.padding(paddingValues),
-                    onBack = { appBackStack.remove() },
-                    entryProvider = entryProvider {
-                        entry<Home> {
-                            ContentGreen("Welcome to Nav3. Logged in? ${appBackStack.isLoggedIn}") {
-                                Column {
-                                    Button(onClick = { appBackStack.add(Profile) }) {
-                                        Text("Profile")
-                                    }
-                                    Button(onClick = { appBackStack.add(Login) }) {
-                                        Text("Login")
-                                    }
+            val appBackStack = remember {
+                AppBackStack(startRoute = Home, loginRoute = Login)
+            }
+
+            NavDisplay(
+                backStack = appBackStack.backStack,
+                onBack = { appBackStack.remove() },
+                entryProvider = entryProvider {
+                    entry<Home> {
+                        ContentGreen("Welcome to Nav3. Logged in? ${appBackStack.isLoggedIn}") {
+                            Column {
+                                Button(onClick = { appBackStack.add(Profile) }) {
+                                    Text("Profile")
                                 }
-                            }
-                        }
-                        entry<Profile> {
-                            ContentBlue("Profile screen (only accessible once logged in)") {
-                                Button(onClick = {
-                                    appBackStack.logout()
-                                }) {
-                                    Text("Logout")
-                                }
-                            }
-                        }
-                        entry<Login> {
-                            ContentYellow("Login screen. Logged in? ${appBackStack.isLoggedIn}") {
-                                Button(onClick = {
-                                    appBackStack.login()
-                                }) {
+                                Button(onClick = { appBackStack.add(Login) }) {
                                     Text("Login")
                                 }
                             }
                         }
                     }
-                )
-            }
+                    entry<Profile> {
+                        ContentBlue("Profile screen (only accessible once logged in)") {
+                            Button(onClick = {
+                                appBackStack.logout()
+                            }) {
+                                Text("Logout")
+                            }
+                        }
+                    }
+                    entry<Login> {
+                        ContentYellow("Login screen. Logged in? ${appBackStack.isLoggedIn}") {
+                            Button(onClick = {
+                                appBackStack.login()
+                            }) {
+                                Text("Login")
+                            }
+                        }
+                    }
+                }
+            )
         }
     }
 }
@@ -134,7 +129,9 @@ class AppBackStack<T : Any>(startRoute: T, private val loginRoute: T) {
         }
 
         // If the user explicitly requested the login route, don't redirect them after login
-        if (route == loginRoute){ onLoginSuccessRoute = null }
+        if (route == loginRoute) {
+            onLoginSuccessRoute = null
+        }
     }
 
     fun remove() = backStack.removeLastOrNull()
