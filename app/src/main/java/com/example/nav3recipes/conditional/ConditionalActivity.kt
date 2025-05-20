@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -58,7 +57,7 @@ class ConditionalActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold { paddingValues ->
+            Scaffold { _ ->
 
                 val appBackStack = remember {
                     AppBackStack(startRoute = Home, loginRoute = Login)
@@ -66,7 +65,6 @@ class ConditionalActivity : ComponentActivity() {
 
                 NavDisplay(
                     backStack = appBackStack.backStack,
-                    modifier = Modifier.padding(paddingValues),
                     onBack = { appBackStack.remove() },
                     entryProvider = entryProvider {
                         entry<Home> {

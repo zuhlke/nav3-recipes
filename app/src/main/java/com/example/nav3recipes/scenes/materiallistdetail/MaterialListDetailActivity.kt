@@ -21,8 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,7 +28,6 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -65,14 +62,13 @@ class MaterialListDetailActivity : ComponentActivity() {
 
         setContent {
 
-            Scaffold { paddingValues ->
+            Scaffold { _ ->
 
                 val backStack = rememberNavBackStack(ConversationList)
                 val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
                 NavDisplay(
                     backStack = backStack,
-                    modifier = Modifier.consumeWindowInsets(paddingValues),
                     onBack = { keysToRemove -> repeat(keysToRemove){ backStack.removeLastOrNull() } },
                     sceneStrategy = listDetailStrategy,
                     entryProvider = entryProvider {

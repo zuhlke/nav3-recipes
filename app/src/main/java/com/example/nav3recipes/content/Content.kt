@@ -103,8 +103,8 @@ fun ContentBase(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(WindowInsets.safeContent.asPaddingValues())
             .fillMaxSize()
+            .safeDrawingPadding()
             .clip(RoundedCornerShape(48.dp))
     ) {
         Title(title)

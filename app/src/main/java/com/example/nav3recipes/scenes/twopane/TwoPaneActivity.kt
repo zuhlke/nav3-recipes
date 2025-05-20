@@ -26,8 +26,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,7 +35,6 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -103,7 +100,7 @@ class TwoPaneActivity : ComponentActivity() {
                 }
             }
 
-            Scaffold { paddingValues ->
+            Scaffold { _ ->
 
                 val backStack = rememberNavBackStack(Home)
                 val twoPaneStrategy = remember { TwoPaneSceneStrategy<Any>() }
@@ -112,7 +109,6 @@ class TwoPaneActivity : ComponentActivity() {
                     CompositionLocalProvider(localNavSharedTransitionScope provides this) {
                         NavDisplay(
                             backStack = backStack,
-                            modifier = Modifier.consumeWindowInsets(paddingValues),
                             onBack = { keysToRemove -> repeat(keysToRemove) { backStack.removeLastOrNull() } },
                             entryDecorators = listOf(
                                 sharedEntryInSceneNavEntryDecorator,

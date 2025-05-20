@@ -13,12 +13,9 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -52,7 +49,7 @@ class AnimatedActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            Scaffold { paddingValues ->
+            Scaffold { _ ->
 
                 val backStack = rememberNavBackStack(ScreenA)
 
@@ -114,8 +111,7 @@ class AnimatedActivity : ComponentActivity() {
                         // Slide in from left when navigating back
                         slideInHorizontally(initialOffsetX = { -it }) togetherWith
                                 slideOutHorizontally(targetOffsetX = { it })
-                    },
-                    modifier = Modifier.consumeWindowInsets(paddingValues)
+                    }
                 )
             }
         }

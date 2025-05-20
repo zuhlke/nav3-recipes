@@ -20,8 +20,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
@@ -38,7 +36,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -99,11 +96,10 @@ class CommonUiActivity : ComponentActivity() {
                         }
                     }
                 }
-            ) { paddingValues ->
+            ) { _ -> // We will handle padding at a lower level in the UI tree
                 NavDisplay(
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
-                    modifier = Modifier.consumeWindowInsets(paddingValues),
                     entryProvider = entryProvider {
                         entry<Home>{
                             ContentRed("Home screen")

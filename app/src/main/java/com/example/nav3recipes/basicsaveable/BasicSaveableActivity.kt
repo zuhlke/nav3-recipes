@@ -20,12 +20,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -57,7 +54,6 @@ class BasicSaveableActivity : ComponentActivity() {
 
                 NavDisplay(
                     backStack = backStack,
-                    modifier = Modifier.consumeWindowInsets(paddingValues),
                     onBack = { backStack.removeLastOrNull() },
                     entryProvider = { key ->
                         when (key) {
