@@ -1,5 +1,5 @@
 # Navigation 3 - Code recipes
-[Jetpack Navigation 3](https://goog.le/nav3) is a library for app navigation. This repository contains recipes for how to 
+[Jetpack Navigation 3](https://goo.gle/nav3) is a library for app navigation. This repository contains recipes for how to 
 use its APIs to implement common navigation use cases.
 
 ## Recipes
