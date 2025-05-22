@@ -2,11 +2,6 @@
 [Jetpack Navigation 3](https://goo.gle/nav3) is a library for app navigation. This repository contains recipes for how to 
 use its APIs to implement common navigation use cases.
 
-| Custom layout example |
-| :---------------------|
-| ![Custom layout example](/docs/images/TwoPaneScene.gif) |
-| _Screen recording showing the navigation behavior of a [custom, two-pane Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane)._| 
-
 ## Recipes
 These are the recipes and what they demonstrate. 
 
@@ -17,7 +12,7 @@ These are the recipes and what they demonstrate.
 
 **Layouts and animations**
 - **[Material adaptive](app/src/main/java/com/example/nav3recipes/scenes/materiallistdetail)**: Shows how to use a Material list-detail layout. 
-- **[Custom Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane)**: Shows how to create a custom layout using a `Scene` and `SceneStrategy`.
+- **[Custom Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane)**: Shows how to create a custom layout using a `Scene` and `SceneStrategy` (see video of UI behavior below).
 - **[Animations](app/src/main/java/com/example/nav3recipes/animations)**: Override the default animations for all destinations and a single destination.
 
 **Common use cases**
@@ -28,6 +23,11 @@ These are the recipes and what they demonstrate.
 - **Deeplinks**: Create and handle deeplinks to specific destinations
 - **Android XR**: Custom navigation and layout behavior for Android XR
 - **Returning a result from a destination**: Return a result to a previous destination
+
+## Custom layout example
+The following is a screen recording showing the navigation behavior of a [custom, two-pane Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane).
+
+![Custom layout example](/docs/images/TwoPaneScene.gif)
 
 ## Instructions
 Clone this repository and open the root folder in [Android Studio](https://developer.android.com/studio). Each recipe is contained in its own package with its own `Activity`.
