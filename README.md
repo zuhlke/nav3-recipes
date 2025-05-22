@@ -2,8 +2,6 @@
 [Jetpack Navigation 3](https://goo.gle/nav3) is a library for app navigation. This repository contains recipes for how to 
 use its APIs to implement common navigation use cases.
 
-[img src=
-
 ## Recipes
 These are the recipes and what they demonstrate. 
 
