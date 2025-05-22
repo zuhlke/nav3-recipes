@@ -2,6 +2,8 @@
 [Jetpack Navigation 3](https://goo.gle/nav3) is a library for app navigation. This repository contains recipes for how to 
 use its APIs to implement common navigation use cases.
 
+[img src=
+
 ## Recipes
 These are the recipes and what they demonstrate. 
 
@@ -25,7 +27,7 @@ These are the recipes and what they demonstrate.
 - **Returning a result from a destination**: Return a result to a previous destination
 
 ## Instructions
-Clone this repository and open the root folder in [Android Studio](https://developer.android.com/studio). Each recipe is contained in its own package.
+Clone this repository and open the root folder in [Android Studio](https://developer.android.com/studio). Each recipe is contained in its own package with its own `Activity`.
 
 ## Contributing
 We'd love to accept your contributions. Please follow [these instructions](CONTRIBUTING.md).
