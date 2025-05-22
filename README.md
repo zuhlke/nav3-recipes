@@ -2,8 +2,10 @@
 [Jetpack Navigation 3](https://goo.gle/nav3) is a library for app navigation. This repository contains recipes for how to 
 use its APIs to implement common navigation use cases.
 
-![Custom layout example](/docs/images/TwoPaneScene.gif)
-_Screen recording showing the navigation behavior of a [custom, two-pane Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane)._ 
+| Custom layout example |
+| :---------------------|
+| ![Custom layout example](/docs/images/TwoPaneScene.gif) |
+| _Screen recording showing the navigation behavior of a [custom, two-pane Scene](app/src/main/java/com/example/nav3recipes/scenes/twopane)._| 
 
 ## Recipes
 These are the recipes and what they demonstrate. 
