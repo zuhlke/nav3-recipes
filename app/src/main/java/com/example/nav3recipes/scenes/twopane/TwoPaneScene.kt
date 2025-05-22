@@ -22,8 +22,8 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOW
 class TwoPaneScene<T : Any>(
     override val key: Any,
     override val previousEntries: List<NavEntry<T>>,
-    val firstEntry: NavEntry<T>, // Renamed from 'left'
-    val secondEntry: NavEntry<T> // Renamed from 'right'
+    val firstEntry: NavEntry<T>,
+    val secondEntry: NavEntry<T>
 ) : Scene<T> {
     override val entries: List<NavEntry<T>> = listOf(firstEntry, secondEntry)
     override val content: @Composable (() -> Unit) = {
@@ -75,8 +75,8 @@ class TwoPaneSceneStrategy<T : Any> : SceneStrategy<T> {
         return if (lastTwoEntries.size == 2
             && lastTwoEntries.all { it.metadata.containsKey(TwoPaneScene.TWO_PANE_KEY) }
         ) {
-            val firstEntry = lastTwoEntries.first() // Renamed from 'leftEntry'
-            val secondEntry = lastTwoEntries.last() // Renamed from 'rightEntry'
+            val firstEntry = lastTwoEntries.first()
+            val secondEntry = lastTwoEntries.last()
 
             // The scene key must uniquely represent the state of the scene.
             // A Pair of the first and second entry keys ensures uniqueness.
@@ -90,8 +90,8 @@ class TwoPaneSceneStrategy<T : Any> : SceneStrategy<T> {
                 // back stack at a time. It would therefore be confusing to the user to add one
                 // when navigating forward, but remove two when navigating back.
                 previousEntries = entries.dropLast(1),
-                firstEntry = firstEntry, // Renamed parameter
-                secondEntry = secondEntry // Renamed parameter
+                firstEntry = firstEntry,
+                secondEntry = secondEntry
             )
 
         } else {
