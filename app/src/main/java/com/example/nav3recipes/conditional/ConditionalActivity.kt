@@ -44,11 +44,11 @@ import com.example.nav3recipes.content.ContentYellow
  *
  */
 
-data object Home
+private data object Home
 
 // A marker interface is used to mark any routes that require login
-data object Profile : AppBackStack.RequiresLogin
-data object Login
+private data object Profile : AppBackStack.RequiresLogin
+private data object Login
 
 class ConditionalActivity : ComponentActivity() {
 

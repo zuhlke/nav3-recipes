@@ -63,11 +63,11 @@ import kotlinx.serialization.Serializable
  * @see `TwoPaneScene`
  */
 @Serializable
-object Home : NavKey
+private object Home : NavKey
 @Serializable
-data class Product(val id: Int) : NavKey
+private data class Product(val id: Int) : NavKey
 @Serializable
-data object Profile : NavKey
+private data object Profile : NavKey
 
 class TwoPaneActivity : ComponentActivity() {
 
