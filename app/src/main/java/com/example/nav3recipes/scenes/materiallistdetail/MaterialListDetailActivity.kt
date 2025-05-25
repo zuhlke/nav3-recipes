@@ -44,13 +44,13 @@ import kotlinx.serialization.Serializable
  * the content for these destinations will be shown in a two pane layout.
  */
 @Serializable
-object ConversationList : NavKey
+private object ConversationList : NavKey
 
 @Serializable
-data class ConversationDetail(val id: String) : NavKey
+private data class ConversationDetail(val id: String) : NavKey
 
 @Serializable
-data object Profile : NavKey
+private data object Profile : NavKey
 
 class MaterialListDetailActivity : ComponentActivity() {
 

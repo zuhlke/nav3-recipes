@@ -38,10 +38,10 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data object RouteA : NavKey
+private data object RouteA : NavKey
 
 @Serializable
-data class RouteB(val id: String) : NavKey
+private data class RouteB(val id: String) : NavKey
 
 class BasicSaveableActivity : ComponentActivity() {
 

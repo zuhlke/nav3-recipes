@@ -32,13 +32,13 @@ import kotlinx.serialization.Serializable
  *
  */
 @Serializable
-data object ScreenA : NavKey
+private data object ScreenA : NavKey
 
 @Serializable
-data object ScreenB : NavKey
+private data object ScreenB : NavKey
 
 @Serializable
-data object ScreenC : NavKey
+private data object ScreenC : NavKey
 
 
 class AnimatedActivity : ComponentActivity() {
