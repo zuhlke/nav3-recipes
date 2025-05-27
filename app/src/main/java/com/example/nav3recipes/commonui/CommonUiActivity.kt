@@ -99,7 +99,7 @@ class CommonUiActivity : ComponentActivity() {
                         }
                     }
                 }
-            ) { contentPadding ->
+            ) { _ ->
                 NavDisplay(
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
@@ -121,9 +121,6 @@ class CommonUiActivity : ComponentActivity() {
                             ContentPurple("Camera screen")
                         }
                     },
-                    modifier = Modifier
-                        .padding(contentPadding)
-                        .consumeWindowInsets(contentPadding)
                 )
             }
         }
