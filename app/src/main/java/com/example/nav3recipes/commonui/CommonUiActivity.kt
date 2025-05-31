@@ -62,7 +62,7 @@ import com.example.nav3recipes.ui.theme.PastelPurple
  * back from a single remaining top level route in the back stack.
  */
 
-private interface TopLevelRoute {
+private sealed interface TopLevelRoute {
     val icon: ImageVector
 }
 private data object Home : TopLevelRoute { override val icon = Icons.Default.Home }
