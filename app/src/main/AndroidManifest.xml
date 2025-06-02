@@ -28,6 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nav3Recipes"
         android:enableOnBackInvokedCallback="true"
+        android:name=".content.Nav3RecipesApplication"
         tools:targetApi="31">
         <activity
             android:name=".basic.BasicActivity"
@@ -69,6 +70,14 @@
             android:theme="@style/Theme.Nav3Recipes"/>
         <activity
             android:name=".conditional.ConditionalActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Nav3Recipes"/>
+        <activity
+            android:name=".passingarguments.basicviewmodels.BasicViewModelsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Nav3Recipes"/>
+        <activity
+            android:name=".passingarguments.injectedviewmodels.InjectedViewModelsActivity"
             android:exported="true"
             android:theme="@style/Theme.Nav3Recipes"/>
     </application>
