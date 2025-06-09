@@ -63,7 +63,6 @@ kotlinx-serialization-json               = { module = "org.jetbrains.kotlinx:kot
 androidx-material-icons-extended         = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-material3-navigation3           = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3Material" }
 
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
