@@ -1,0 +1,82 @@
+package com.example.nav3recipes.recipepicker
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.nav3recipes.animations.AnimatedActivity
+import com.example.nav3recipes.basic.BasicActivity
+import com.example.nav3recipes.basicdsl.BasicDslActivity
+import com.example.nav3recipes.basicsaveable.BasicSaveableActivity
+import com.example.nav3recipes.commonui.CommonUiActivity
+import com.example.nav3recipes.conditional.ConditionalActivity
+import com.example.nav3recipes.scenes.materiallistdetail.MaterialListDetailActivity
+import com.example.nav3recipes.scenes.twopane.TwoPaneActivity
+
+/**
+ * Activity to show all available recipes and allow users to launch each one.
+ */
+private data class Recipe(
+    val name: String,
+    val activityClass: Class<out Activity>
+)
+
+private val recipes = listOf(
+    Recipe("Basic", BasicActivity::class.java),
+    Recipe("Basic DSL", BasicDslActivity::class.java),
+    Recipe("Basic Saveable", BasicSaveableActivity::class.java),
+    Recipe("Animations", AnimatedActivity::class.java),
+    Recipe("Conditional navigation", ConditionalActivity::class.java),
+    Recipe("Common UI", CommonUiActivity::class.java),
+    Recipe("Material list-detail layout", MaterialListDetailActivity::class.java),
+    Recipe("Two pane layout", TwoPaneActivity::class.java)
+)
+
+class RecipePicker : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            Scaffold { contentPadding ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(contentPadding)
+                        .fillMaxSize()
+                ) {
+                    item {
+                        Text(
+                            text = "Nav3 Recipes",
+                            style = MaterialTheme.typography.headlineMedium,
+                        )
+                    }
+                    items(recipes) { recipe ->
+                        Button(onClick = { startRecipe(recipe.activityClass) }) {
+                            Text(recipe.name)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startRecipe(cls: Class<out Activity>) {
+        val intent = Intent(this@RecipePicker, cls)
+        startActivity(intent)
+    }
+}
