@@ -1,4 +1,4 @@
-package com.example.nav3recipes.screenPicker
+package com.example.nav3recipes.recipepicker
 
 import android.app.Activity
 import android.content.Intent
@@ -28,27 +28,25 @@ import com.example.nav3recipes.scenes.materiallistdetail.MaterialListDetailActiv
 import com.example.nav3recipes.scenes.twopane.TwoPaneActivity
 
 /**
- * Screen to pick which navigation recipe to try out
+ * Activity to show all available recipes and allow users to launch each one.
  */
-
-
-private data class ActivityButton(
-    val text: String,
+private data class Recipe(
+    val name: String,
     val activityClass: Class<out Activity>
 )
 
-private val buttons = listOf(
-    ActivityButton("Basic", BasicActivity::class.java),
-    ActivityButton("Basic Dsl", BasicDslActivity::class.java),
-    ActivityButton("Basic Saveable", BasicSaveableActivity::class.java),
-    ActivityButton("Animated", AnimatedActivity::class.java),
-    ActivityButton("Conditional", ConditionalActivity::class.java),
-    ActivityButton("Common Ui", CommonUiActivity::class.java),
-    ActivityButton("Material List Detail", MaterialListDetailActivity::class.java),
-    ActivityButton("Two Pane", TwoPaneActivity::class.java)
+private val recipes = listOf(
+    Recipe("Basic", BasicActivity::class.java),
+    Recipe("Basic DSL", BasicDslActivity::class.java),
+    Recipe("Basic Saveable", BasicSaveableActivity::class.java),
+    Recipe("Animations", AnimatedActivity::class.java),
+    Recipe("Conditional navigation", ConditionalActivity::class.java),
+    Recipe("Common UI", CommonUiActivity::class.java),
+    Recipe("Material list-detail layout", MaterialListDetailActivity::class.java),
+    Recipe("Two pane layout", TwoPaneActivity::class.java)
 )
 
-class ScreenPicker : ComponentActivity() {
+class RecipePicker : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -63,13 +61,13 @@ class ScreenPicker : ComponentActivity() {
                 ) {
                     item {
                         Text(
-                            text = "Choose a navigation recipe",
+                            text = "Nav3 Recipes",
                             style = MaterialTheme.typography.headlineMedium,
                         )
                     }
-                    items(buttons) { (name, activityClass) ->
-                        Button(onClick = { navigateTo(activityClass) }) {
-                            Text(name)
+                    items(recipes) { recipe ->
+                        Button(onClick = { startRecipe(recipe.activityClass) }) {
+                            Text(recipe.name)
                         }
                     }
                 }
@@ -77,8 +75,8 @@ class ScreenPicker : ComponentActivity() {
         }
     }
 
-    private fun navigateTo(cls: Class<out Activity>) {
-        val intent = Intent(this@ScreenPicker, cls)
+    private fun startRecipe(cls: Class<out Activity>) {
+        val intent = Intent(this@RecipePicker, cls)
         startActivity(intent)
     }
 }
