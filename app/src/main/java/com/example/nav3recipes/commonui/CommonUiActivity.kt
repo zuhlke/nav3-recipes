@@ -22,6 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
@@ -100,7 +101,7 @@ class CommonUiActivity : ComponentActivity() {
                         }
                     }
                 }
-            ) { contentPadding ->
+            ) { _ ->
                 NavDisplay(
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
@@ -122,7 +123,6 @@ class CommonUiActivity : ComponentActivity() {
                             ContentPurple("Camera screen")
                         }
                     },
-                    modifier = Modifier.consumeWindowInsets(contentPadding)
                 )
             }
         }
