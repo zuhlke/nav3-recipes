@@ -24,6 +24,8 @@ import com.example.nav3recipes.basicdsl.BasicDslActivity
 import com.example.nav3recipes.basicsaveable.BasicSaveableActivity
 import com.example.nav3recipes.commonui.CommonUiActivity
 import com.example.nav3recipes.conditional.ConditionalActivity
+import com.example.nav3recipes.passingarguments.basicviewmodels.BasicViewModelsActivity
+import com.example.nav3recipes.passingarguments.injectedviewmodels.InjectedViewModelsActivity
 import com.example.nav3recipes.scenes.materiallistdetail.MaterialListDetailActivity
 import com.example.nav3recipes.scenes.twopane.TwoPaneActivity
 
@@ -43,7 +45,9 @@ private val recipes = listOf(
     Recipe("Conditional navigation", ConditionalActivity::class.java),
     Recipe("Common UI", CommonUiActivity::class.java),
     Recipe("Material list-detail layout", MaterialListDetailActivity::class.java),
-    Recipe("Two pane layout", TwoPaneActivity::class.java)
+    Recipe("Two pane layout", TwoPaneActivity::class.java),
+    Recipe("Argument passing to basic ViewModel", BasicViewModelsActivity::class.java),
+    Recipe("Argument passing to injected ViewModel", InjectedViewModelsActivity::class.java)
 )
 
 class RecipePicker : ComponentActivity() {
