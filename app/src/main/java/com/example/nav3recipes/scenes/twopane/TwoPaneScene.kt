@@ -29,10 +29,10 @@ class TwoPaneScene<T : Any>(
     override val content: @Composable (() -> Unit) = {
         Row(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.weight(0.5f)) {
-                firstEntry.content.invoke(firstEntry.key)
+                firstEntry.Content()
             }
             Column(modifier = Modifier.weight(0.5f)) {
-                secondEntry.content.invoke(secondEntry.key)
+                secondEntry.Content()
             }
         }
     }
@@ -80,7 +80,7 @@ class TwoPaneSceneStrategy<T : Any> : SceneStrategy<T> {
 
             // The scene key must uniquely represent the state of the scene.
             // A Pair of the first and second entry keys ensures uniqueness.
-            val sceneKey = Pair(firstEntry.key, secondEntry.key)
+            val sceneKey = Pair(firstEntry.contentKey, secondEntry.contentKey)
 
             TwoPaneScene(
                 key = sceneKey,
