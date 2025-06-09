@@ -44,6 +44,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 /**
  * Passing navigation arguments to a Hilt injected ViewModel
  *
+ * - ViewModelStoreNavEntryDecorator ensures that ViewModels are scoped to the NavEntry
  * - Assisted injection is used to construct ViewModels with the navigation key
  */
 

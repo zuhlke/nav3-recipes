@@ -75,7 +75,7 @@ class BasicViewModelsActivity : ComponentActivity() {
                         }
                     }
                     entry<RouteB> { key ->
-                        ScreenB(viewModel = viewModel(factory = RouteBViewModel.Factory(key.id)))
+                        ScreenB(viewModel = viewModel(factory = RouteBViewModel.Factory(key)))
                     }
                 }
             )
@@ -85,17 +85,17 @@ class BasicViewModelsActivity : ComponentActivity() {
 
 @Composable
 fun ScreenB(viewModel: RouteBViewModel = viewModel()) {
-    ContentBlue("Route id: ${viewModel.id} ")
+    ContentBlue("Route id: ${viewModel.key.id} ")
 }
 
 class RouteBViewModel(
-    val id: String
+    val key: RouteB
 ) : ViewModel() {
     class Factory(
-        private val id: String,
+        private val key: RouteB,
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RouteBViewModel(id) as T
+            return RouteBViewModel(key) as T
         }
     }
 }
