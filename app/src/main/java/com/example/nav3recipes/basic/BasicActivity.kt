@@ -33,9 +33,9 @@ import com.example.nav3recipes.content.ContentGreen
  * Basic example with two screens, showing how to use the Navigation 3 API.
  */
 
-data object RouteA
+private data object RouteA
 
-data class RouteB(val id: String)
+private data class RouteB(val id: String)
 
 class BasicActivity : ComponentActivity() {
 

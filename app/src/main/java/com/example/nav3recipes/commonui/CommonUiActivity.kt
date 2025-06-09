@@ -62,15 +62,15 @@ import com.example.nav3recipes.ui.theme.PastelPurple
  * back from a single remaining top level route in the back stack.
  */
 
-interface TopLevelRoute {
+private sealed interface TopLevelRoute {
     val icon: ImageVector
 }
-data object Home : TopLevelRoute { override val icon = Icons.Default.Home }
-data object ChatList : TopLevelRoute { override val icon = Icons.Default.Face }
-data object ChatDetail
-data object Camera : TopLevelRoute { override val icon = Icons.Default.PlayArrow }
+private data object Home : TopLevelRoute { override val icon = Icons.Default.Home }
+private data object ChatList : TopLevelRoute { override val icon = Icons.Default.Face }
+private data object ChatDetail
+private data object Camera : TopLevelRoute { override val icon = Icons.Default.PlayArrow }
 
-val TOP_LEVEL_ROUTES : List<TopLevelRoute> = listOf(Home, ChatList, Camera)
+private val TOP_LEVEL_ROUTES : List<TopLevelRoute> = listOf(Home, ChatList, Camera)
 
 class CommonUiActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
