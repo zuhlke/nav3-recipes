@@ -35,7 +35,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 
 /**
  * Passing navigation arguments to a ViewModel.
@@ -49,7 +49,7 @@ data class RouteB(val id: String)
 class BasicViewModelsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
             val backStack = remember { mutableStateListOf<Any>(RouteA) }

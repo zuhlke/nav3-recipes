@@ -35,7 +35,7 @@ import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentRed
 import com.example.nav3recipes.content.ContentYellow
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 import kotlinx.serialization.Serializable
 
 /**
@@ -56,7 +56,7 @@ class MaterialListDetailActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
 
         setContent {

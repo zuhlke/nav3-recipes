@@ -46,7 +46,7 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.example.nav3recipes.content.ContentBase
 import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentRed
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 import com.example.nav3recipes.ui.theme.colors
 import kotlinx.serialization.Serializable
 
@@ -73,7 +73,7 @@ class TwoPaneActivity : ComponentActivity() {
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
 
         setContent {

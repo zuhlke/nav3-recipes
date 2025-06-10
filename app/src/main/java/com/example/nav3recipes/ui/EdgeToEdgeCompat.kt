@@ -4,11 +4,11 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 
-fun ComponentActivity.enableEdgeToEdgeCompat() {
+fun ComponentActivity.setEdgeToEdgeConfig() {
     enableEdgeToEdge()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        // Fix for three-button nav not properly going edge-to-edge.
-        // TODO: https://issuetracker.google.com/issues/298296168
+        // Force the 3-button navigation bar to be transparent
+        // See: https://developer.android.com/develop/ui/views/layout/edge-to-edge#create-transparent
         window.isNavigationBarContrastEnforced = false
     }
 }

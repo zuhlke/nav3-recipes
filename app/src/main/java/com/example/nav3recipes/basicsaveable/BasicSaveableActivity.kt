@@ -27,7 +27,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 import kotlinx.serialization.Serializable
 
 /**
@@ -46,7 +46,7 @@ private data class RouteB(val id: String) : NavKey
 class BasicSaveableActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
             val backStack = rememberNavBackStack(RouteA)

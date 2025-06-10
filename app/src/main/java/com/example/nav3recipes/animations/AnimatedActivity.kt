@@ -22,7 +22,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentMauve
 import com.example.nav3recipes.content.ContentOrange
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 import kotlinx.serialization.Serializable
 
 
@@ -44,7 +44,7 @@ private data object ScreenC : NavKey
 class AnimatedActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
 

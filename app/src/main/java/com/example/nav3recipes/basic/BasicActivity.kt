@@ -27,7 +27,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 
 /**
  * Basic example with two screens, showing how to use the Navigation 3 API.
@@ -40,7 +40,7 @@ private data class RouteB(val id: String)
 class BasicActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
             val backStack = remember { mutableStateListOf<Any>(RouteA) }

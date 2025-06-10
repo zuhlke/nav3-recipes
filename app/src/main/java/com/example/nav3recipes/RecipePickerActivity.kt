@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +32,7 @@ import com.example.nav3recipes.passingarguments.basicviewmodels.BasicViewModelsA
 import com.example.nav3recipes.passingarguments.injectedviewmodels.InjectedViewModelsActivity
 import com.example.nav3recipes.scenes.materiallistdetail.MaterialListDetailActivity
 import com.example.nav3recipes.scenes.twopane.TwoPaneActivity
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 
 /**
  * Activity to show all available recipes and allow users to launch each one.
@@ -59,7 +59,7 @@ class RecipePickerActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        setEdgeToEdgeConfig()
         setContent {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),

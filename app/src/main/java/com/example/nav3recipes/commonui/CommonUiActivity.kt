@@ -19,8 +19,6 @@ package com.example.nav3recipes.commonui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
@@ -37,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
@@ -46,8 +43,7 @@ import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentPurple
 import com.example.nav3recipes.content.ContentRed
-import com.example.nav3recipes.ui.enableEdgeToEdgeCompat
-import com.example.nav3recipes.ui.theme.PastelPurple
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 
 /**
  * Common navigation UI example. This app has three top level routes: Home, ChatList and Camera.
@@ -74,7 +70,7 @@ private val TOP_LEVEL_ROUTES : List<TopLevelRoute> = listOf(Home, ChatList, Came
 
 class CommonUiActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdgeCompat()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
             val topLevelBackStack = remember { TopLevelBackStack<Any>(Home) }
