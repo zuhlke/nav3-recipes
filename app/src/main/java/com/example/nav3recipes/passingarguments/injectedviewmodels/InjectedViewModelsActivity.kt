@@ -19,7 +19,6 @@ package com.example.nav3recipes.passingarguments.injectedviewmodels
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +34,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.example.nav3recipes.content.ContentBlue
 import com.example.nav3recipes.content.ContentGreen
+import com.example.nav3recipes.ui.setEdgeToEdgeConfig
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -55,7 +55,7 @@ data class RouteB(val id: String)
 class InjectedViewModelsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
             val backStack = remember { mutableStateListOf<Any>(RouteA) }
