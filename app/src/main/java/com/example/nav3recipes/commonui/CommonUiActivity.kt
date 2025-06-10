@@ -32,10 +32,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.SaverScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -44,6 +46,7 @@ import com.example.nav3recipes.content.ContentGreen
 import com.example.nav3recipes.content.ContentPurple
 import com.example.nav3recipes.content.ContentRed
 import com.example.nav3recipes.ui.setEdgeToEdgeConfig
+import kotlinx.serialization.Serializable
 
 /**
  * Common navigation UI example. This app has three top level routes: Home, ChatList and Camera.
@@ -58,22 +61,37 @@ import com.example.nav3recipes.ui.setEdgeToEdgeConfig
  * back from a single remaining top level route in the back stack.
  */
 
-private sealed interface TopLevelRoute {
+private interface TopLevelRoute : NavKey {
     val icon: ImageVector
 }
-private data object Home : TopLevelRoute { override val icon = Icons.Default.Home }
-private data object ChatList : TopLevelRoute { override val icon = Icons.Default.Face }
-private data object ChatDetail
-private data object Camera : TopLevelRoute { override val icon = Icons.Default.PlayArrow }
 
-private val TOP_LEVEL_ROUTES : List<TopLevelRoute> = listOf(Home, ChatList, Camera)
+@Serializable
+private data object Home : TopLevelRoute {
+    override val icon = Icons.Default.Home
+}
+
+@Serializable
+private data object ChatList : TopLevelRoute {
+    override val icon = Icons.Default.Face
+}
+
+@Serializable
+private data object ChatDetail : NavKey
+
+@Serializable
+private data object Camera : TopLevelRoute {
+    override val icon = Icons.Default.PlayArrow
+}
+
+private val TOP_LEVEL_ROUTES: List<TopLevelRoute> = listOf(Home, ChatList, Camera)
 
 class CommonUiActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
-            val topLevelBackStack = remember { TopLevelBackStack<Any>(Home) }
+            val topLevelBackStack =
+                rememberSaveable(saver = TopLevelBackStack.Saver) { TopLevelBackStack(Home) }
 
             Scaffold(
                 bottomBar = {
@@ -101,20 +119,20 @@ class CommonUiActivity : ComponentActivity() {
                     backStack = topLevelBackStack.backStack,
                     onBack = { topLevelBackStack.removeLast() },
                     entryProvider = entryProvider {
-                        entry<Home>{
+                        entry<Home> {
                             ContentRed("Home screen")
                         }
-                        entry<ChatList>{
-                            ContentGreen("Chat list screen"){
+                        entry<ChatList> {
+                            ContentGreen("Chat list screen") {
                                 Button(onClick = { topLevelBackStack.add(ChatDetail) }) {
                                     Text("Go to conversation")
                                 }
                             }
                         }
-                        entry<ChatDetail>{
+                        entry<ChatDetail> {
                             ContentBlue("Chat detail screen")
                         }
-                        entry<Camera>{
+                        entry<Camera> {
                             ContentPurple("Camera screen")
                         }
                     },
@@ -124,19 +142,29 @@ class CommonUiActivity : ComponentActivity() {
     }
 }
 
-class TopLevelBackStack<T: Any>(startKey: T) {
+private class TopLevelBackStack() {
+
+    constructor(startKey: TopLevelRoute) : this() {
+        topLevelStacks.put(startKey, mutableStateListOf(startKey))
+        updateBackStack()
+        topLevelKey = startKey
+    }
+
+    private constructor(topLevelStacks: LinkedHashMap<TopLevelRoute, SnapshotStateList<NavKey>>) : this() {
+        this.topLevelStacks.putAll(topLevelStacks)
+        updateBackStack()
+        topLevelKey = topLevelStacks.entries.toTypedArray()[topLevelStacks.size - 1].key
+    }
 
     // Maintain a stack for each top level route
-    private var topLevelStacks : LinkedHashMap<T, SnapshotStateList<T>> = linkedMapOf(
-        startKey to mutableStateListOf(startKey)
-    )
+    private val topLevelStacks = linkedMapOf<TopLevelRoute, SnapshotStateList<NavKey>>()
 
     // Expose the current top level route for consumers
-    var topLevelKey by mutableStateOf(startKey)
+    var topLevelKey by mutableStateOf<NavKey?>(null)
         private set
 
     // Expose the back stack so it can be rendered by the NavDisplay
-    val backStack = mutableStateListOf(startKey)
+    val backStack = mutableStateListOf<NavKey>()
 
     private fun updateBackStack() =
         backStack.apply {
@@ -144,10 +172,9 @@ class TopLevelBackStack<T: Any>(startKey: T) {
             addAll(topLevelStacks.flatMap { it.value })
         }
 
-    fun addTopLevel(key: T){
-
+    fun addTopLevel(key: TopLevelRoute) {
         // If the top level doesn't exist, add it
-        if (topLevelStacks[key] == null){
+        if (topLevelStacks[key] == null) {
             topLevelStacks.put(key, mutableStateListOf(key))
         } else {
             // Otherwise just move it to the end of the stacks
@@ -161,17 +188,45 @@ class TopLevelBackStack<T: Any>(startKey: T) {
         updateBackStack()
     }
 
-    fun add(key: T){
+    fun add(key: NavKey) {
         topLevelStacks[topLevelKey]?.add(key)
         updateBackStack()
     }
 
-    fun removeLast(){
+    fun removeLast() {
         val removedKey = topLevelStacks[topLevelKey]?.removeLastOrNull()
         // If the removed key was a top level key, remove the associated top level stack
         topLevelStacks.remove(removedKey)
         topLevelKey = topLevelStacks.keys.last()
         updateBackStack()
+    }
+
+    object Saver : androidx.compose.runtime.saveable.Saver<TopLevelBackStack, List<Any>> {
+        override fun SaverScope.save(value: TopLevelBackStack): List<Any>? {
+            return buildList {
+                value.topLevelStacks.forEach { topLevelRoute, childRoutes ->
+                    add(topLevelRoute)
+                    add(ArrayList(childRoutes))
+                }
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun restore(value: List<Any>): TopLevelBackStack? {
+            val list = value
+            val map = linkedMapOf<TopLevelRoute, SnapshotStateList<NavKey>>()
+            check(list.size.rem(2) == 0) { "non-zero remainder" }
+            var index = 0
+            while (index < value.size) {
+                val key = list[index] as TopLevelRoute
+                val value = list[index + 1] as ArrayList<NavKey>
+                map[key] = SnapshotStateList(value.size) {
+                    value[it]
+                }
+                index += 2
+            }
+            return TopLevelBackStack(map)
+        }
     }
 }
 
