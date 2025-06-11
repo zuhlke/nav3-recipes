@@ -36,6 +36,7 @@ import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
@@ -61,7 +62,7 @@ import kotlinx.serialization.Serializable
  * back from a single remaining top level route in the back stack.
  */
 
-private interface TopLevelRoute : NavKey {
+private sealed interface TopLevelRoute : NavKey {
     val icon: ImageVector
 }
 
@@ -90,8 +91,9 @@ class CommonUiActivity : ComponentActivity() {
         setEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
         setContent {
-            val topLevelBackStack =
-                rememberSaveable(saver = TopLevelBackStack.Saver) { TopLevelBackStack(Home) }
+            val topLevelBackStack = rememberSaveable(saver = TopLevelBackStack.Saver) {
+                TopLevelBackStack(startKey = Home)
+            }
 
             Scaffold(
                 bottomBar = {
@@ -142,29 +144,29 @@ class CommonUiActivity : ComponentActivity() {
     }
 }
 
-private class TopLevelBackStack() {
+class TopLevelBackStack<T : Any>() {
 
-    constructor(startKey: TopLevelRoute) : this() {
+    constructor(startKey: T) : this() {
         topLevelStacks.put(startKey, mutableStateListOf(startKey))
         updateBackStack()
         topLevelKey = startKey
     }
 
-    private constructor(topLevelStacks: LinkedHashMap<TopLevelRoute, SnapshotStateList<NavKey>>) : this() {
-        this.topLevelStacks.putAll(topLevelStacks)
+    private constructor(topLevelStacks: LinkedHashMap<T, List<T>>) : this() {
+        this.topLevelStacks.putAll(topLevelStacks.mapValues { it.value.toMutableStateList() })
         updateBackStack()
-        topLevelKey = topLevelStacks.entries.toTypedArray()[topLevelStacks.size - 1].key
+        topLevelKey = topLevelStacks.entries.last().key
     }
 
     // Maintain a stack for each top level route
-    private val topLevelStacks = linkedMapOf<TopLevelRoute, SnapshotStateList<NavKey>>()
+    private val topLevelStacks = linkedMapOf<T, SnapshotStateList<T>>()
 
     // Expose the current top level route for consumers
-    var topLevelKey by mutableStateOf<NavKey?>(null)
+    var topLevelKey by mutableStateOf<T?>(null)
         private set
 
     // Expose the back stack so it can be rendered by the NavDisplay
-    val backStack = mutableStateListOf<NavKey>()
+    val backStack = mutableStateListOf<T>()
 
     private fun updateBackStack() =
         backStack.apply {
@@ -172,7 +174,7 @@ private class TopLevelBackStack() {
             addAll(topLevelStacks.flatMap { it.value })
         }
 
-    fun addTopLevel(key: TopLevelRoute) {
+    fun addTopLevel(key: T) {
         // If the top level doesn't exist, add it
         if (topLevelStacks[key] == null) {
             topLevelStacks.put(key, mutableStateListOf(key))
@@ -188,7 +190,7 @@ private class TopLevelBackStack() {
         updateBackStack()
     }
 
-    fun add(key: NavKey) {
+    fun add(key: T) {
         topLevelStacks[topLevelKey]?.add(key)
         updateBackStack()
     }
@@ -201,8 +203,8 @@ private class TopLevelBackStack() {
         updateBackStack()
     }
 
-    object Saver : androidx.compose.runtime.saveable.Saver<TopLevelBackStack, List<Any>> {
-        override fun SaverScope.save(value: TopLevelBackStack): List<Any>? {
+    object Saver : androidx.compose.runtime.saveable.Saver<TopLevelBackStack<NavKey>, List<Any>> {
+        override fun SaverScope.save(value: TopLevelBackStack<NavKey>): List<Any>? {
             return buildList {
                 value.topLevelStacks.forEach { topLevelRoute, childRoutes ->
                     add(topLevelRoute)
@@ -212,20 +214,18 @@ private class TopLevelBackStack() {
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun restore(value: List<Any>): TopLevelBackStack? {
+        override fun restore(value: List<Any>): TopLevelBackStack<NavKey>? {
             val list = value
-            val map = linkedMapOf<TopLevelRoute, SnapshotStateList<NavKey>>()
+            val topLevelStacks = linkedMapOf<NavKey, List<NavKey>>()
             check(list.size.rem(2) == 0) { "non-zero remainder" }
             var index = 0
-            while (index < value.size) {
-                val key = list[index] as TopLevelRoute
+            while (index < list.size) {
+                val key = list[index] as NavKey
                 val value = list[index + 1] as ArrayList<NavKey>
-                map[key] = SnapshotStateList(value.size) {
-                    value[it]
-                }
+                topLevelStacks[key] = value
                 index += 2
             }
-            return TopLevelBackStack(map)
+            return TopLevelBackStack(topLevelStacks)
         }
     }
 }
